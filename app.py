@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar 15 13:22:13 2020
 
-@author: Nicholsa Papiri
-"""
 import requests
 import json
 from json import loads
