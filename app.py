@@ -1,36 +1,54 @@
-from vega_datasets import data
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar 15 13:22:13 2020
+
+@author: Nicholsa Papiri
+"""
+import requests
+import json
+from json import loads
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+import pandas as pd
+from pandas.io.json import json_normalize
 import streamlit as st
 import altair as alt
 
-def main():
-    df = load_data()
-    page = st.sidebar.selectbox("Choose a page", ["Homepage", "Exploration"])
 
-    if page == "Homepage":
-        st.header("This is your data explorer.")
-        st.write("Please select a page on the left.")
-        st.write(df)
-    elif page == "Exploration":
-        st.title("Data Exploration")
-        x_axis = st.selectbox("Choose a variable for the x-axis", df.columns, index=3)
-        y_axis = st.selectbox("Choose a variable for the y-axis", df.columns, index=4)
-        visualize_data(df, x_axis, y_axis)
 
-@st.cache
-def load_data():
-    df = data.cars()
-    return df
+url = "https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats"
 
-def visualize_data(df, x_axis, y_axis):
-    graph = alt.Chart(df).mark_circle(size=60).encode(
-        x=x_axis,
-        y=y_axis,
-        color='Origin',
-        tooltip=['Name', 'Origin', 'Horsepower', 'Miles_per_Gallon']
-    ).interactive()
+querystring = {"country":"US"}
 
-    st.write(graph)
+headers = {
+    'x-rapidapi-host': "covid-19-coronavirus-statistics.p.rapidapi.com",
+    'x-rapidapi-key': "2d81c24244mshffe53b231648b51p1450f7jsn88b6e0713f7e"
+    }
 
-if __name__ == "__main__":
-    main()
 
+response= requests.get(url,headers=headers, params=querystring)
+
+response.json()
+
+json_res= response.json()
+
+
+df = json_normalize(json_res,['data','covid19Stats'])
+
+
+st.title('COVID19 Data via API')
+if st.checkbox('Show Data'):
+    st.write(df,height=1000, length =1000)
+
+
+if st.checkbox('deaths'):
+     c = alt.Chart(df, width=800, height=800).mark_bar(clip=True).encode(x='province', y='deaths')
+     st.altair_chart(c)
+
+if st.checkbox('recovered'):
+     c = alt.Chart(df, width=800, height=800).mark_bar(clip=True).encode(x='province', y='recovered')
+     st.altair_chart(c)
+
+if st.checkbox('confirmed'):
+     c = alt.Chart(df, width=800, height=800).mark_bar(clip=True).encode(x='province', y='confirmed')
+     st.altair_chart(c)
