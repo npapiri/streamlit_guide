@@ -3,7 +3,6 @@ import requests
 import json
 from json import loads
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
 from pandas.io.json import json_normalize
 import streamlit as st
