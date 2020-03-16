@@ -2,7 +2,6 @@
 import requests
 import json
 from json import loads
-import spotipy
 import pandas as pd
 from pandas.io.json import json_normalize
 import streamlit as st
