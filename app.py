@@ -1,6 +1,4 @@
 
-from IPython import get_ipython
-get_ipython().magic('reset -sf')
 import requests
 import json
 from json import loads
@@ -28,22 +26,22 @@ response.json()
 json_res= response.json()
 
 
-df = json_normalize(json_res,['data','covid19Stats'])
+df1 = json_normalize(json_res,['data','covid19Stats'])
 
 
 st.title('COVID19 Data via API')
 if st.checkbox('Show Data'):
-    st.write(df,height=1000, length =1000)
+    st.write(df1,height=1000, length =1000)
 
 
 if st.checkbox('deaths'):
-     c = alt.Chart(df, width=800, height=800).mark_bar(clip=True).encode(x='province', y='deaths')
+     c = alt.Chart(df1, width=800, height=800).mark_bar(clip=True).encode(x='province', y='deaths')
      st.altair_chart(c)
 
 if st.checkbox('recovered'):
-     c = alt.Chart(df, width=800, height=800).mark_bar(clip=True).encode(x='province', y='recovered')
+     c = alt.Chart(df1, width=800, height=800).mark_bar(clip=True).encode(x='province', y='recovered')
      st.altair_chart(c)
 
 if st.checkbox('confirmed'):
-     c = alt.Chart(df, width=800, height=800).mark_bar(clip=True).encode(x='province', y='confirmed')
+     c = alt.Chart(df1, width=800, height=800).mark_bar(clip=True).encode(x='province', y='confirmed')
      st.altair_chart(c)
