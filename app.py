@@ -1,4 +1,6 @@
 
+from IPython import get_ipython
+get_ipython().magic('reset -sf')
 import requests
 import json
 from json import loads
